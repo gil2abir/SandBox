@@ -1,0 +1,65 @@
+clear all;
+close all;
+ Vard=4.97; % Arduino supply V
+ beta=3560;
+ R25=220;
+ dt=0.004;
+ fs=1/dt;
+ fnorm=10/(fs/2);
+ Ta= [ 25.3 , 22.9 , 23 , 22.6 ,22.5 , 22.5 , 22.5 ,22.5];
+Vraw={load('q1.txt'),load('q2.txt'),load('q3.txt'),load('q4.txt'),load('q5.txt'),load('q6.txt') ,load('q7.txt'),load('q8.txt') };
+Vin=[15.8 ,15.8 , 19.5 , 22.3 , 22.3 ,22.3 , 22.3 ,22.3 ]; %supply voltage to bridge
+Vbr=[1.64 ,1.64 ,2.02 , 2.313 , 2.310 , 2.31 ,2.31 ,2.307  ]; % measured voltage on potentiometer
+% 
+%  lpfilt = designfilt('lowpassfir','FilterOrder',200,'CutoffFrequency',fnorm);
+% 
+%  fvtool(lpfilt);
+ 
+ %D = mean(grpdelay(lpfilt));
+
+%Vfilt=filter(lpfilt,Vraw{:,2});
+%%
+
+ for i=4:8;
+ V=[Vraw{:,i}]; 
+ t=(0:dt:((dt*length(V))-dt));% create time vector acording to  milisec delay
+   Vsmooth=smooth(V,20); %smooth signal
+%  Vsmooth = filter(lpfilt,[V; zeros(D,1)]); % Append D zeros to the input data
+%  Vsmooth = Vsmooth(D+1:end); 
+ % Vsmooth=filtfilt(lpfilt,V(:));
+
+ Volt{i}=Vsmooth*3.3/4096; % amplified signal in Volts
+ Vther{i}=Vbr(i)-(Volt{i}/9.4726); %  Voltage on thermistor , gain is 1+33/3.895 , potentiometer 0.52 V
+ Rth{i}=(2450*Vther{i})./(Vin(i)-Vther{i}); % arduino voltage 4.97 V
+ Tk=beta./(log(Rth{i}/R25)+beta/298.15); %temp in kelvin
+ Tc{i}=Tk-273.15;
+ 
+ figure (1)
+ plot(t,Volt{i});
+ hold on
+ title ('Output and Thermistor Voltage');
+ plot (t,Vther{i});
+ hold on
+ xlabel(' Time [sec]');
+ ylabel ('Amplitude [V]');
+ %legend ( 'Vout' , 'Vther');
+ figure (2)
+ plot (t,Tc{i});
+ hold on
+ title('T centigrade');
+ xlabel(' Time [sec]');
+ ylabel ('Temperature [c]');
+figure (3)
+ plot(t,Rth{i});
+ title('Thermistor resistence Vs time');
+ xlabel(' Time[sec]');
+ ylabel ('Resistence[ohm]');
+ hold on
+ 
+ Q=((mean(Vther{i}(end-25:end-10)))^2)./mean(Rth{i}(end-10:end)); % take the mean of last 10 samples and calculate Q
+ d(i)=(mean(Tc{i}(end-25:end-10))-Ta(i))/Q;
+ end
+ 
+ Dmean= mean(d(4:8));
+ Dstd=std(d(4:8));
+ 
