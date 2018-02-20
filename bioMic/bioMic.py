@@ -1,4 +1,5 @@
 import sys, os, alsaaudio, time, audioop, numpy, glob, scipy, subprocess, wave, cPickle, threading, shutil, cv2
+sys.path.insert(0, '/home/gilac/SandBox/pyAudioAnalysis')
 import argparse
 import scipy.io.wavfile as wavfile
 from scipy.fftpack import rfft
