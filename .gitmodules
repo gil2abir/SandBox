@@ -1,3 +1,6 @@
 [submodule "eulerian-magnification"]
 	path = eulerian-magnification
 	url = https://github.com/brycedrennan/eulerian-magnification.git
+[submodule "Deep-Learning-Boot-Camp"]
+	path = Deep-Learning-Boot-Camp
+	url = https://github.com/QuantScientist/Deep-Learning-Boot-Camp.git
