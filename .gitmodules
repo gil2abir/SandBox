@@ -1,5 +1,3 @@
-[submodule "LSTM_Examples/LSTM-Human-Activity-Recognition"]
-	url = https://github.com/gil2abir/LSTM_Examples
 [submodule "eulerian-magnification"]
 	path = eulerian-magnification
 	url = https://github.com/brycedrennan/eulerian-magnification.git
