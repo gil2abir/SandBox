@@ -4,3 +4,6 @@
 [submodule "bigdata18"]
 	path = bigdata18
 	url = https://github.com/hfawaz/bigdata18.git
+[submodule "Tuties/OPENCV"]
+	path = Tuties/OPENCV
+	url = https://github.com/mrever/CASIS-OpenCV-Course.git
